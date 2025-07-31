@@ -11,27 +11,17 @@ const App = () => {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
-  const [all, setAll] = useState(0)
-  const [average, setAverage] = useState(0)
-  const [positive, setPositive] = useState(0)
+  const total = good + neutral + bad
+  const average = ((good * 1) + (neutral * 0) + (bad * -1))/total
+  const positive = (good / total) * 100
 
   // create the handlers for each button
   const handleGoodClick = () => {
     console.log('average before', average) 
+
     // create the variable for the updated value 
     const updatedGood = good + 1
-
     setGood(updatedGood) // Increase good count and update component state
-
-    const total = updatedGood + neutral + bad // create a variable to hold the total
-    setAll(total) //update the component state of the total
-
-    // good feedback is equivalent to 1. Add to the total average
-    const goodFeedback = 1
-    const newAverage = ((average + goodFeedback) / total)
-
-    setAverage(newAverage)
-    console.log('average after', average) 
   }
   
   const handleBadClick = () => { 
@@ -39,7 +29,6 @@ const App = () => {
     const updatedBad = bad + 1
 
     setBad(updatedBad) // Increase bad count and update component state
-    setAll(good + neutral + updatedBad) //update the component state of the total
   }
 
   const handleNeutralClick = () => { 
@@ -47,7 +36,6 @@ const App = () => {
     const updatedNeutral = neutral + 1
 
     setNeutral(updatedNeutral) // Increase neutral count and update component state
-    setAll(good + updatedNeutral + bad) //update the component state of All
   }
 
   return ( 
@@ -61,9 +49,9 @@ const App = () => {
         <p>Good {good}</p>
         <p>Neutral {neutral}</p>
         <p>Bad {bad}</p>
-        <p>All {all}</p>
+        <p>All {total}</p>
         <p>Average {average}</p>
-        <p>positive {positive}</p>
+        <p>positive {positive} %</p>
       </div>
     </div>
   )
