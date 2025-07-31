@@ -14,25 +14,38 @@ const Statistics = (props) => {
   if (total === 0) { 
     return ( 
       <div>
-        <h1>statistics</h1>
         No feedback given
       </div>
     )
   }
   return ( 
     <div>
-      <p>Good {props.good}</p>
-      <p>Neutral {props.neutral}</p>
-      <p>Bad {props.bad}</p>
-      <h1>statistics</h1>
-      <p>All {total}</p>
-      <p>Average {((props.good * 1) + (props.neutral * 0) + (props.bad * -1))/total}</p>
-      <p>Positive {props.good / total}</p>
+      <table>
+        <tbody>
+          <StatisticLine text='good' value={props.good}/>
+          <StatisticLine text='neutral' value={props.neutral}/>
+          <StatisticLine text='bad' value={props.bad}/>
+          <StatisticLine text='all' value={total}/>
+          <StatisticLine text='average' value={((props.good * 1) + (props.neutral * 0) + (props.bad * -1))/total}/>
+          <StatisticLine text='positive' value={`${(props.good / total) * 100}%`}/>
+        </tbody>
+      </table>
     </div>
   )
 }
 
+// statisticLine subcomponent to be used by the statistics component
+const StatisticLine = ({text, value}) => { 
+  return ( 
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
+  )
+}
+
 const App = () => { 
+
   // save clicks of each button to its own state 
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
@@ -40,24 +53,15 @@ const App = () => {
 
   // create the handlers for each button
   const handleGoodClick = () => {
-
-    // create the variable for the updated value 
-    const updatedGood = good + 1
-    setGood(updatedGood) // Increase good count and update component state
+    setGood(good + 1) // Increase good count and update component state
   }
   
   const handleBadClick = () => { 
-    // create the variable for the updated value 
-    const updatedBad = bad + 1
-
-    setBad(updatedBad) // Increase bad count and update component state
+    setBad(bad + 1) // Increase bad count and update component state
   }
 
   const handleNeutralClick = () => { 
-    // create the variable for the updated value 
-    const updatedNeutral = neutral + 1
-
-    setNeutral(updatedNeutral) // Increase neutral count and update component state
+    setNeutral(neutral + 1) // Increase neutral count and update component state
   }
 
   return ( 
@@ -67,6 +71,7 @@ const App = () => {
       <Button onClick={handleNeutralClick} text='neutral'/>
       <Button onClick={handleBadClick} text='bad'/>
 
+      <h1>statistics</h1>
       <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
   )
