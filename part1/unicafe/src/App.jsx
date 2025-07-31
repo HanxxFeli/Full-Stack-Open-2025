@@ -11,8 +11,19 @@ const Button = ({onClick, text}) => {
 const Statistics = (props) => { 
   const total = props.good + props.neutral + props.bad
 
+  if (total === 0) { 
+    return ( 
+      <div>
+        <h1>statistics</h1>
+        No feedback given
+      </div>
+    )
+  }
   return ( 
-    <div> 
+    <div>
+      <p>Good {props.good}</p>
+      <p>Neutral {props.neutral}</p>
+      <p>Bad {props.bad}</p>
       <h1>statistics</h1>
       <p>All {total}</p>
       <p>Average {((props.good * 1) + (props.neutral * 0) + (props.bad * -1))/total}</p>
@@ -55,22 +66,11 @@ const App = () => {
       <Button onClick={handleGoodClick} text='good'/>
       <Button onClick={handleNeutralClick} text='neutral'/>
       <Button onClick={handleBadClick} text='bad'/>
-      <div>
-        <p>Good {good}</p>
-        <p>Neutral {neutral}</p>
-        <p>Bad {bad}</p>
-      </div>
+
       <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
   )
 }
-
-// all / total 
-
-// average
-
-// percentage of positive feedback (good/total)
-
 
 export default App
 
