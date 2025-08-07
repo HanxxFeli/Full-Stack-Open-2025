@@ -14,9 +14,20 @@ const App = () => {
       name: newName
     }
 
-    // set the new contact 
+    // check if the contact is already existing. First check if the type is a string. If so, check if it matches
+    const contactExists = persons.some(person => 
+      person.name.toLowerCase() === personObject.name.toLowerCase()
+    )
+    console.log(contactExists)
+
+    // if contact exists, send an alert. Otherwise, add the person to the phonebook
+    if (contactExists) { 
+      alert(`${newName} is already added to the phonebook`)
+    } else { 
+      // set the new contact 
     setPersons(persons.concat(personObject)) // add the object to the person list to be displayed
     setNewName('') // clear the input box to an empty string
+    }
   }
 
   // handler for adding contacts
@@ -24,7 +35,6 @@ const App = () => {
     console.log(event.target.value)
     setNewName(event.target.value)
   }
-
 
   return (
     <div>
