@@ -1,7 +1,7 @@
 // adding new Persons
 const Person = ({person}) => { 
     return(
-        <p>{person.name}</p>
+        <p>{person.name} {person.number}</p>
     )
 }
 
