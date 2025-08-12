@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from 'axios'
+import phoneBookService from './services/notes'
 import Person from './components/Person'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
@@ -13,12 +13,10 @@ const App = () => {
 
   // fetching data from the server using axios 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get("http://localhost:3001/persons")
-      .then(response=> {
-        console.log('promise fulfilled')
-        setPersons(response.data)
+    phoneBookService
+      .displayAll()
+      .then(initialContacts => { 
+        setPersons(initialContacts)
       })
   }, [])
 
@@ -26,6 +24,7 @@ const App = () => {
   const addContact = (event) => { 
     event.preventDefault()
     const personObject = {
+      id: String(persons.length + 1),
       name: newName,
       number: newNumber,
     }
@@ -34,16 +33,21 @@ const App = () => {
     const contactExists = persons.some(person => 
       person.name.toLowerCase() === personObject.name.toLowerCase()
     )
-    console.log(contactExists)
+    console.log('Does the contact exist', contactExists)
 
     // if contact exists, send an alert. Otherwise, add the person to the phonebook
     if (contactExists) { 
       alert(`${newName} is already added to the phonebook`)
     } else { 
-      // set the new contact 
-    setPersons(persons.concat(personObject)) // add the object to the person list to be displayed
-    setNewName('') // clear the input box to an empty string
-    setNewNumber('')
+
+    // send data to the server to create the phone contact 
+    phoneBookService
+      .addContact(personObject)
+      .then(createdContact => { 
+        setPersons(persons.concat(createdContact))
+        setNewName('')
+        setNewNumber('')
+      })
     }
   }
 
