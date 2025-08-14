@@ -3,12 +3,15 @@ import phoneBookService from './services/notes'
 import Person from './components/Person'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
+import Notification from './components/Notification'
 
 const App = () => { 
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('') // controlling the form input element
   const [newNumber, setNewNumber] = useState('')
   const [filter, setNewFilter] = useState('') // for filtering people by name
+  const [successMessage, setSuccessMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   // fetching data from the server using axios 
   useEffect(() => {
@@ -63,6 +66,7 @@ const App = () => {
             setPersons(updatedPersons)
             setNewName('')
             setNewNumber('')
+            setSuccessMessage(`Updated number of ${existingContact.name}`)
           })
       }
     } 
@@ -74,6 +78,12 @@ const App = () => {
         setPersons(persons.concat(createdContact))
         setNewName('')
         setNewNumber('')
+        setSuccessMessage(`Added ${personObject.name}`)
+
+        // adding a timeout for successfully adding a contact
+        setTimeout(() => { 
+          setSuccessMessage(null)
+        }, 5000)
       })
     } // end of else statement
   } // end of addContact
@@ -109,12 +119,20 @@ const App = () => {
       phoneBookService
         .removeContact(contactToDelete.id)
         .then(() => personToDelete(contactToDelete.id))
+        .catch(error => { 
+          setErrorMessage(`Information of ${contactToDelete.name} has already been removed from server`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000);
+        })
       }
   } // handleRemoveContact
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={successMessage} type ='success'/>
+      <Notification message={errorMessage} type ='error'/>
       <Filter value={filter} onchange={handleNameFilter}/>
 
       <h2>add a new</h2>
