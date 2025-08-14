@@ -1,7 +1,13 @@
+import Button from './Button'
+
+
 // adding new Persons
-const Person = ({person}) => { 
+const Person = ({person, onDelete}) => { 
     return(
-        <p>{person.name} {person.number}</p>
+        <div>
+            <span>{person.name} {person.number}</span>
+            <Button onClick={() => onDelete(person)} text="delete"/>
+        </div>
     )
 }
 

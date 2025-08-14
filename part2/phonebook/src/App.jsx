@@ -6,7 +6,6 @@ import PersonForm from './components/PersonForm'
 
 const App = () => { 
   const [persons, setPersons] = useState([])
-  const [filteredPersons, setFilteredPersons] = useState([])
   const [newName, setNewName] = useState('') // controlling the form input element
   const [newNumber, setNewNumber] = useState('')
   const [filter, setNewFilter] = useState('') // for filtering people by name
@@ -19,6 +18,12 @@ const App = () => {
         setPersons(initialContacts)
       })
   }, [])
+
+  // check if filter exists, if yes, filter the person list
+  const displayedContacts = filter
+    ? persons.filter(person => 
+      person.name.toLowerCase().includes(filter.toLowerCase())
+    ) : persons
 
   // adding a new contact 
   const addContact = (event) => { 
@@ -68,20 +73,22 @@ const App = () => {
     let filterValue = event.target.value
     setNewFilter(filterValue)
     // console.log("filter value is", filterValue)
+    }
 
-    // output filtered array of matching values
-    const result = persons.filter(person => { 
-      return (
-        person.name.toLowerCase().includes(filterValue.toLowerCase())
-      )
-    })
+  // handler for removing contact
+  const handleRemoveContact = (contactToDelete) => {  
+    // window confirmation 
+    if (window.confirm(`Delete ${contactToDelete.name}`)) { 
+            // function to identify person to be removed    
+      const personToDelete = (id) => { 
+        setPersons(persons.filter(person => person.id !== id))
+      }
 
-    // console.log("resulting array elements are", result)
-
-    // person array will become the result array to display only the filtered results
-    // console.log("the original data is", persons)
-    result.length === 0 ? setFilteredPersons(persons) : setFilteredPersons(result)
-  }
+      phoneBookService
+        .removeContact(contactToDelete.id)
+        .then(() => personToDelete(contactToDelete.id))
+      }
+    }
 
   return (
     <div>
@@ -99,9 +106,8 @@ const App = () => {
 
       <h2>Numbers</h2>
       <div>
-        {filteredPersons.length === 0 ? 
-        persons.map(person => <Person key={person.name} person={person}/>) // display original persons list if filterPersons is empty
-        : filteredPersons.map(person => <Person key={person.name} person={person}/>) // display filterPersons if > 0
+        {displayedContacts.map(person => 
+          <Person key={person.name} person={person} onDelete={handleRemoveContact}/>)
         }
       </div>
     </div>
