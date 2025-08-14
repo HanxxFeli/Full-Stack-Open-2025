@@ -42,9 +42,31 @@ const App = () => {
 
     // if contact exists, send an alert. Otherwise, add the person to the phonebook
     if (contactExists) { 
-      alert(`${newName} is already added to the phonebook`)
-    } else { 
+      if (window.confirm(`${newName} is already added to the phonebook, replace the older number with a new one?`)) { 
+        
+        // identify the person to be updated 
+        const existingContact = persons.find(person => person.name === newName)
+        console.log("the existing contact details are:", existingContact)
 
+        // create a new persons array containing the updated number
+        const updatedPersons = persons.map(person => {
+          if (person.id === existingContact.id) { 
+            return {...person, number: newNumber}
+          }
+          return person
+        })
+
+        // update the person object with the matching name with the new number
+        phoneBookService
+          .updateContact(existingContact)
+          .then(() => { 
+            setPersons(updatedPersons)
+            setNewName('')
+            setNewNumber('')
+          })
+      }
+    } 
+    else { 
     // send data to the server to create the phone contact 
     phoneBookService
       .addContact(personObject)
@@ -53,27 +75,27 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
-    }
-  }
+    } // end of else statement
+  } // end of addContact
 
   // handler for adding contacts
   const handleNewContact = (event) => {
     console.log(event.target.value)
     setNewName(event.target.value)
-  }
+  } // handleNewContact
 
   // handler for adding numbers
   const handleNewNumber = (event) => { 
     console.log(event.target.value)
     setNewNumber(event.target.value)
-  }
+  } // handleNewNumber
 
   // handler for filtering people by name
   const handleNameFilter = (event) => { 
     let filterValue = event.target.value
     setNewFilter(filterValue)
     // console.log("filter value is", filterValue)
-    }
+  } // handleNameFilter
 
   // handler for removing contact
   const handleRemoveContact = (contactToDelete) => {  
@@ -88,7 +110,7 @@ const App = () => {
         .removeContact(contactToDelete.id)
         .then(() => personToDelete(contactToDelete.id))
       }
-    }
+  } // handleRemoveContact
 
   return (
     <div>
@@ -111,7 +133,7 @@ const App = () => {
         }
       </div>
     </div>
-  )
-}
+  ) // return
+} // App
 
 export default App

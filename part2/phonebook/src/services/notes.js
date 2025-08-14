@@ -16,4 +16,10 @@ const removeContact = (contactID) => {
     return request.then(response => console.log(`Contact with Contact ID ${contactID} has been deleted successfully`, response.data)) // checking if the value has been removed
 }
 
-export default {displayAll, addContact, removeContact}
+const updateContact = (existingObject) => { 
+    console.log("the exisitng object is", existingObject)
+    const request = axios.put(`${baseUrl}/${existingObject.id}`, existingObject)
+    return request.then(response => response.data)
+}
+
+export default {displayAll, addContact, removeContact, updateContact}
