@@ -26,7 +26,7 @@ const Country = ({country, showDetails = false}) => {
     } else { 
         return ( 
             <div>
-                {country.common.name}
+                {country.name.common}
             </div>
         )
     }
