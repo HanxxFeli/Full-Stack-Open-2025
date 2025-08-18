@@ -79,10 +79,18 @@ app.post('/api/contacts', (request, response) => {
   const body = request.body // get the data that was sent in the request
 
   // if the body content is empty, send a 400 error code and message
-  if (!body.name && !body.number) { 
+  if (!body.name) { 
     return response.status(400).json({
-      error: 'content missing'
+      error: 'Name value missing'
     })
+  } else if (!body.number) { 
+    return response.status(400).json({
+      error: 'Number value missing'
+    })
+  } else if (contacts.find(contact => contact.name === body.name)) { 
+    return response.status(409).json({
+      error: 'name must be unique'
+    })   
   }
 
   // create the content body to be sent 
