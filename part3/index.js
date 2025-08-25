@@ -1,6 +1,15 @@
 const express = require('express')
+const morgan = require('morgan') // importing the morgan middleware
 const app = express()
 
+// function for getting the body using morgan 
+morgan.token("body", (request) => { 
+  return JSON.stringify(request.body);
+})
+
+const morganLogger = morgan(':method :url :status :res[content-length] - :response-time ms :body') // display the details you want to usee from morgan
+
+app.use(morganLogger)
 app.use(express.json()) // use the json parser from express
 
 let contacts = [
