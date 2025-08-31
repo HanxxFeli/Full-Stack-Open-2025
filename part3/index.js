@@ -123,6 +123,7 @@ app.delete('/api/contacts/:id', (request, response) => {
 })
 
 
-const PORT = 3001
-app.listen(PORT) // ensuring the script continues running and oes not exit
-console.log(`App is running on Port ${PORT}`)
+const PORT = process.env.PORT || 3001
+app.listen(PORT, () => { 
+  console.log(`server running on port ${PORT}`)
+}) // ensuring the script continues running and oes not exit
