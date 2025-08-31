@@ -36,9 +36,9 @@ let contacts = [
 ]
 
 // testing for working backend
-app.get('/', (request, response) => { 
-  response.send('<h1>This is the contact landing page</h1>')
-})
+// app.get('/', (request, response) => { 
+//   response.send('<h1>This is the contact landing page</h1>')
+// })
 
 // getting all the contacts 
 app.get('/api/contacts', (request, response) => { 
