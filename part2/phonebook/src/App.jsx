@@ -102,7 +102,7 @@ const App = () => {
 
   // handler for filtering people by name
   const handleNameFilter = (event) => { 
-    let filterValue = event.target.value
+    const filterValue = event.target.value
     setNewFilter(filterValue)
     // console.log("filter value is", filterValue)
   } // handleNameFilter
