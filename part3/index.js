@@ -11,6 +11,7 @@ const morganLogger = morgan(':method :url :status :res[content-length] - :respon
 
 app.use(morganLogger)
 app.use(express.json()) // use the json parser from express
+app.use(express.static('dist')) // use the dist file for the frontend
 
 let contacts = [
     { 
