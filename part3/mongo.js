@@ -1,9 +1,6 @@
 const mongoose = require('mongoose')
 
-if (process.argv.length < 3 ) { 
-    console.log("provide password as argument")
-    process.exit(1)
-}
+
 
 // accessing the command line 2nd param
 const password = process.argv[2]
@@ -24,26 +21,32 @@ const contactSchema = new mongoose.Schema({
 
 const Contact = mongoose.model("Contact", contactSchema)
 
-// creating new contacts for testing 
-const contact = new Contact({ 
-    name: process.argv[3],
-    number: process.argv[4],
-})
+if (process.argv.length < 3 ) { 
+    console.log("provide password as argument")
+    process.exit(1)
+} else if (process.argv.length === 5) { 
+    // creating new contacts for testing 
+    const contact = new Contact({ 
+        name: process.argv[3],
+        number: process.argv[4],
+    })
 
-// save the created contact
-contact.save().then(result => { 
-    console.log(`added ${result.name} number ${result.number} to phonebook`)
-})
-
-// retrieving all the contacts 
-if (process.argv.length === 3) { 
+    // save the created contact
+    contact.save().then(result => { 
+        console.log(`added ${result.name} number ${result.number} to phonebook`)
+        mongoose.connection.close()
+    })
+} else if (process.argv.length === 3) { 
+    // retrieving all the contacts 
     Contact.find({}).then(contacts => { 
+        console.log("phonebook")
         contacts.forEach(contact => {
-            console.log(contact)
+            console.log(`${contact.name} ${contact.number}`)
         });
 
         mongoose.connection.close()
     })
 }
+
 
 
